@@ -1,8 +1,9 @@
 const connection = require('./connection');
 
 const listProducts = async () => {
-  const query = 'SELECT * FROM StoreManager.products';
-  const [result] = await connection.execute(query);
+  const [result] = await connection.execute(
+    'SELECT * FROM StoreManager.products',
+  );
   
   return result;
 };
