@@ -1,4 +1,3 @@
-// Renomeie esse arquivo
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 

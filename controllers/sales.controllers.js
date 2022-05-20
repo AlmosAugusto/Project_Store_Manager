@@ -3,6 +3,7 @@ const { SUCESS, NOT_FOUND } = require('../statusCode');
 
 const listSales = async (_req, res, _next) => {
   const sales = await services.listSales();
+
   return res.status(SUCESS).json(sales);
   };
 
@@ -13,9 +14,8 @@ const listSales = async (_req, res, _next) => {
     if (!findedById || findedById.length === 0) {
 return res.status(NOT_FOUND).json(
       { message: 'Sale not found' },
-); 
-}
-
+    ); 
+      }
     return res.status(SUCESS).json(findedById);
     };
 

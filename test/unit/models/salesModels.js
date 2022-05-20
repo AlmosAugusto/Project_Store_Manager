@@ -1,4 +1,4 @@
-const salesModel = require('../../../models/salesModel');
+const salesModel = require('../../../models/sales.model');
 const connection = require('../../../models/connection');
 
 

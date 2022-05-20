@@ -1,4 +1,4 @@
-const salesModel = require('../../../models/salesModel');
+const salesModel = require('../../../models/sales.model');
 const salesService = require('../../../services/sales.service')
 
 

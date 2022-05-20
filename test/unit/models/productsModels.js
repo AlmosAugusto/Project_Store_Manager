@@ -1,5 +1,5 @@
 // Resolvi tentar fazer os testes...
-const productsModel = require('../../../models/productsModel');
+const productsModel = require('../../../models/products.model');
 const connection = require('../../../models/connection');
 
 

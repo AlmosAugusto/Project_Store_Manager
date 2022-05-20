@@ -1,4 +1,4 @@
-const models = require('../models/salesModel');
+const models = require('../models/sales.model');
 
 const listSales = async () => {
   const listedSales = await models.listSales();
