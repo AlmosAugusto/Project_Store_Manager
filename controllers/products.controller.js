@@ -20,7 +20,6 @@ const listProducts = async (_req, res, _next) => {
       const { name, quantity } = req.body;
 
       const createdProduct = await services.createProduct(name, quantity);
-    console.log(createdProduct);
       return res.status(CREATED).json(createdProduct);
     } catch (err) {
       return res.status(CONFLICT).json({ message: 'Product already exists' });

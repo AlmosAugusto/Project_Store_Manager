@@ -9,36 +9,33 @@ const listProducts = async () => {
 };
 
 const findById = async (id) => {
-  const result = await connection.execute(
-    'SELECT * FROM StoreManager.products WHERE id = ?',
-     [id],
-);
+  const query = 'SELECT * FROM StoreManager.products WHERE id = ?';
+  const result = await connection.execute(query, [id]);
   return result[0];
 };
   const getproductByName = async (name) => {
-    const [byName] = await connection.execute(
-    'SELECT * FROM StoreManager.products WHERE name = ?',
-    [name],
-    );
-    return byName;
+    const query = 'SELECT * FROM StoreManager.products WHERE name = ?';
+    const [result] = await connection.execute(query, [name]);
+    console.log(result);
+    return result[0];
   };
 
 const createProduct = async (name, quantity) => {
-  const [result] = await connection.execute(
-    `INSERT INTO StoreManager.products (name, quantity)
-    VALUES (?, ?)`,
-    [name, quantity],
-);
-return {
-  id: result.insertId,
-  name,
-  quantity,
-};
+  const query = `INSERT INTO StoreManager.products (name, quantity)
+  VALUES (?, ?)`;
+  const [registeredId] = await connection.execute(query, [name, quantity]);
+  
+  const createdProduct = {
+    id: registeredId.insertId,
+    name,
+    quantity,
+  };
+  return createdProduct;
 };
 
 module.exports = {
   listProducts,
   findById,
-  createProduct,
   getproductByName,
+  createProduct,
 };

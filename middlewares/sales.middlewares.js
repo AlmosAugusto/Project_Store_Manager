@@ -1,7 +1,7 @@
 // const Joi = require('joi'); // Tentei tentei e não consegui fazer com JOI, vou fazer do outro jeito e mais pra frente tento novamente!
 const { INVALID, UNPROCESSABLE_ENTITY } = require('../statusCode');
 
-const validateSales = (req, res, _next) => {
+const validateSales = (req, res, next) => {
   const { productId, quantity } = req.body;
 
   if (productId === undefined) { 
@@ -16,7 +16,7 @@ const validateSales = (req, res, _next) => {
       message: '"quantity" must be greater than or equal to 1' });
    }
 
- /* return next(); */
+ return next();
 };
 
 module.exports = {
