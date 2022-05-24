@@ -27,11 +27,14 @@ app.post('/products', validateProduct, productsController.createProduct);
 // Req? - Post Sales
 // app.post('/sales', validateSales);
 
-// Req? - Put Product
+// Req5 - Put Product
 app.put('/products/:id', validateProduct, productsController.updateProduct);
 
 // Req? - Put Sales
 // app.put('/sales/:id', validateSales);
+
+// Req6 - Delete Product
+app.delete('/products/:id', productsController.deleteProduct);
 
 app.use((err, _req, res, _next) => {
   if (err.status) return res.status(err.status).json({ message: err.message });

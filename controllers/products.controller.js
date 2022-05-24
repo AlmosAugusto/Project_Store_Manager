@@ -1,5 +1,5 @@
 const services = require('../services/products.service');
-const { SUCESS, NOT_FOUND, CREATED, CONFLICT } = require('../statusCode');
+const { SUCESS, NOT_FOUND, CREATED, CONFLICT, DELETE } = require('../statusCode');
 
 const listProducts = async (_req, res, _next) => {
   const products = await services.listProducts();
@@ -39,9 +39,20 @@ const listProducts = async (_req, res, _next) => {
     }
   };
 
+  const deleteProduct = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const deletedProduct = await services.deleteProduct(id);
+      return res.status(DELETE).json(deletedProduct);
+    } catch (err) {
+      next(err);
+    }
+  };
+
 module.exports = {
   listProducts,
   findById,
   createProduct,
   updateProduct,
+  deleteProduct,
 };

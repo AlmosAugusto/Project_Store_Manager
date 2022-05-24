@@ -36,9 +36,20 @@ const updateProduct = async (id, name, quantity) => {
   return registredProduct;
 };
 
+const deleteProduct = async (id) => {
+  const verifyId = await models.findById(id);
+  // console.log(verifyId);
+  if (verifyId.length === 0) throw errorHandler(NOT_FOUND, 'Product not found');
+
+  const deletedProduct = await models.deleteProduct(id);
+
+  return deletedProduct;
+};
+
 module.exports = {
   listProducts,
   findById,
   createProduct,
   updateProduct,
+  deleteProduct,
 };
