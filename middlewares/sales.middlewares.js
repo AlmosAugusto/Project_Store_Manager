@@ -1,24 +1,26 @@
-// const Joi = require('joi'); // Tentei tentei e não consegui fazer com JOI, vou fazer do outro jeito e mais pra frente tento novamente!
+const Joi = require('joi'); 
 const { INVALID, UNPROCESSABLE_ENTITY } = require('../statusCode');
 
-const validateSales = (req, res, next) => {
+const SALES = Joi.object({
+  productId: Joi.number().min(1).required(),
+  quantity: Joi.number().min(1).integer().required(),
+});
+
+const validateProduct = (req, _res, next) => {
   const { productId, quantity } = req.body;
 
-  if (productId === undefined) { 
-    return res.status(INVALID).json({ message: '"productId" is required' }); 
-}
-  if (quantity === undefined) { 
-    return res.status(INVALID).json({ message: '"quantity" is required' }); 
-}
+  const { error } = SALES.validate({ productId, quantity });
 
-   if (quantity <= 0) {
-    return res.status(UNPROCESSABLE_ENTITY).json({ 
-      message: '"quantity" must be greater than or equal to 1' });
+  if (error && error.details[0].message.includes('required')) { // Codigo mostrado pelo Rafael SUMMER da turma 17,na aula de "Validção em JOI"
+    next({ status: INVALID, message: error.details[0].message });
+   }
+  if (error && error.details[0].message.includes('must be')) {
+    next({ status: UNPROCESSABLE_ENTITY, message: error.details[0].message });
    }
 
  return next();
 };
 
 module.exports = {
-  validateSales,
+  validateProduct,
 };

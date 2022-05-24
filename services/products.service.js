@@ -1,5 +1,5 @@
 const models = require('../models/products.model');
-const { CONFLICT } = require('../statusCode');
+const { CONFLICT, NOT_FOUND } = require('../statusCode');
 
 const listProducts = async () => {
   const listedProducts = await models.listProducts();
@@ -15,6 +15,7 @@ const errorHandler = (status, message) => ({
   status,
   message,
 });
+
 const createProduct = async (name, quantity) => {
   const verifyName = await models.getproductByName(name);
   console.log(verifyName);
@@ -25,8 +26,19 @@ const createProduct = async (name, quantity) => {
   return registredProduct;
 };
 
+const updateProduct = async (id, name, quantity) => {
+  const verifyId = await models.findById(id);
+  // console.log(verifyId);
+  if (verifyId.length === 0) throw errorHandler(NOT_FOUND, 'Product not found');
+
+  const registredProduct = await models.updateProduct(id, name, quantity);
+
+  return registredProduct;
+};
+
 module.exports = {
   listProducts,
   findById,
   createProduct,
+  updateProduct,
 };

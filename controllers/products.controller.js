@@ -24,10 +24,24 @@ const listProducts = async (_req, res, _next) => {
     } catch (err) {
       return res.status(CONFLICT).json({ message: 'Product already exists' });
     }
-    };
+  };
+
+  const updateProduct = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { name, quantity } = req.body;
+
+      const updatedProduct = await services.updateProduct(id, name, quantity);
+      return res.status(SUCESS).json(updatedProduct);
+    } catch (err) {
+      // return res.status(NOT_FOUND).json({ message: 'Product not foundout' });
+      next(err);
+    }
+  };
 
 module.exports = {
   listProducts,
   findById,
   createProduct,
+  updateProduct,
 };
