@@ -6,10 +6,10 @@ const SALES = Joi.object({
   quantity: Joi.number().min(1).integer().required(),
 });
 
-const validateProduct = (req, _res, next) => {
-  const { productId, quantity } = req.body;
+const validateSales = (req, _res, next) => {
+  const productIdQuantity = req.body;
 
-  const { error } = SALES.validate({ productId, quantity });
+  const { error } = productIdQuantity.map((sales) => SALES.validate(sales));
 
   if (error && error.details[0].message.includes('required')) { // Codigo mostrado pelo Rafael SUMMER da turma 17,na aula de "Validção em JOI"
     next({ status: INVALID, message: error.details[0].message });
@@ -22,5 +22,5 @@ const validateProduct = (req, _res, next) => {
 };
 
 module.exports = {
-  validateProduct,
+  validateSales,
 };

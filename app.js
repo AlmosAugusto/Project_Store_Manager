@@ -6,6 +6,7 @@ app.use(express.json());
 const productsController = require('./controllers/products.controller');
 const salesController = require('./controllers/sales.controllers');
 const { validateProduct } = require('./middlewares/products.middleware');
+const { validateSales } = require('./middlewares/sales.middlewares');
 const { INTERNAL_SERVER_ERROR } = require('./statusCode');
 
 // não remova esse endpoint, é para o avaliador funcionar
@@ -24,9 +25,6 @@ app.get('/sales/:id', salesController.findById);
 // Req4 - Post Product
 app.post('/products', validateProduct, productsController.createProduct);
 
-// Req? - Post Sales
-// app.post('/sales', validateSales);
-
 // Req5 - Put Product
 app.put('/products/:id', validateProduct, productsController.updateProduct);
 
@@ -35,6 +33,9 @@ app.put('/products/:id', validateProduct, productsController.updateProduct);
 
 // Req6 - Delete Product
 app.delete('/products/:id', productsController.deleteProduct);
+
+// Req7 - Post Sales
+app.post('/sales', validateSales, salesController.createSale);
 
 app.use((err, _req, res, _next) => {
   if (err.status) return res.status(err.status).json({ message: err.message });
