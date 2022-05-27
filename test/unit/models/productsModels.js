@@ -31,6 +31,7 @@ describe ('PRODUCTSMODEL - Testa se retorna uma lista com todos os produtos', ()
       expect(result).to.be.empty;
     })
   })
+
   describe('PRODUCTSMODEL - Quando existem produtos cadastrados no banco de dados', () => {
     const resultExecute =[
       {
@@ -78,5 +79,78 @@ describe ('PRODUCTSMODEL - Testa se retorna uma lista com todos os produtos', ()
       )
     })
   })
+})
 
+  describe ('PRODUCTSMODEL - Testa se apenas o produto com o id presente na URL é retornado;', () => {
+    describe('Quando não existe nenhum produto com o id informado na URl', () => {
+      const resultExecute = [[]];
+  
+      before(() => {
+        sinon.stub(connection, 'execute')
+        .resolves(resultExecute);
+      })
+  
+      after(() => {
+        connection.execute.restore();
+      })
+  
+      it('Teste se retorna um array', async() => {
+        const result = await productsModel.findById();
+        expect(result).to.be.an('array');
+        // console.log(result);
+      })
+  
+      it('Teste se retorna um array vazio', async() => {
+        const result = await productsModel.findById();
+        expect(result).to.be.empty;
+      })
+    })
+  
+    describe('PRODUCTSMODEL - Quando existem produtos cadastrados com o id informado', () => {
+      const resultExecute =[
+        {
+          "id": 1,
+          "name": "produto A",
+          "quantity": 10
+        },
+        {
+          "id": 2,
+          "name": "produto B",
+          "quantity": 20
+        }
+      ];
+  
+      before(() => {
+        sinon.stub(connection, 'execute')
+        .resolves([resultExecute]);
+      })
+  
+      after(() => {
+        connection.execute.restore();
+      })
+  
+      it('Teste se retorna um array', async() => {
+        const result = await productsModel.findById(1);
+        expect(result).to.be.an('array');
+      })
+  
+      it('Teste se o array retornado não está vazio', async() => {
+        const result = await productsModel.findById(1);
+        expect(result).to.be.not.empty;
+      })
+
+      it('Teste se o array retornado possui objetos', async() => {
+        const [result] = await productsModel.findById(2); // desestrutura o result para retornar um objeto
+        expect(result).to.be.an('object');
+  
+      })
+      it('Teste se o objeto dentro do array retornado contem os atributos id, name e quantity', async() => {
+        const [result] = await productsModel.findById(2);
+        expect(result).to.be.includes.all.keys(
+          'id',
+          'name',
+          'quantity'
+        )
+      })
+    })
 })
