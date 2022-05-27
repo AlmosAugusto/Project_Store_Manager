@@ -28,18 +28,18 @@ app.post('/products', validateProduct, productsController.createProduct);
 // Req5 - Put Product
 app.put('/products/:id', validateProduct, productsController.updateProduct);
 
-// Req? - Put Sales
-// app.put('/sales/:id', validateSales);
-
 // Req6 - Delete Product
 app.delete('/products/:id', productsController.deleteProduct);
 
 // Req7 - Post Sales
 app.post('/sales', validateSales, salesController.createSale);
 
+// Req8 - Put Sales
+app.put('/sales/:id', validateSales, salesController.updateSale);
+
 app.use((err, _req, res, _next) => {
   if (err.status) return res.status(err.status).json({ message: err.message });
-  console.log('create product:', err.message);
+  console.log('update sales:', err.message);
   return res.status(INTERNAL_SERVER_ERROR).json({ message: 'internal Server Error 77' });
 });
 // não remova essa exportação, é para o avaliador funcionar

@@ -1,4 +1,5 @@
 const models = require('../models/sales.model');
+const { NOT_FOUND } = require('../statusCode');
 
 const listSales = async () => {
   const listedSales = await models.listSales();
@@ -25,8 +26,30 @@ const createSale = async (sales) => {
   return registeredSale;
 };
 
+const errorHandler = (status, message) => ({
+  status,
+  message,
+});
+
+const updateSale = async (id, sales) => {
+  const [verifyId] = await models.findById(id);
+  // console.log(verifyId);
+  if (verifyId.length === 0) throw errorHandler(NOT_FOUND, 'Sale not found');
+  console.log(sales);
+
+  await Promise.all(sales.map(
+    ({ productId, quantity }) => models.updateSale(id, productId, quantity),
+));
+    const updatedSale = {
+      saleId: id,
+      itemUpdated: sales,
+    };
+  return updatedSale;
+};
+
 module.exports = {
   listSales,
   findById,
   createSale,
+  updateSale,
 };
