@@ -44,10 +44,21 @@ const updateSale = async (id, productId, quantity) => {
   return updatedSale;
 };
 
+const deleteSale = async (id) => {
+  const query = `
+  DELETE s, sp 
+  FROM StoreManager.sales AS s 
+  INNER JOIN StoreManager.sales_products AS sp 
+  ON s.id = sp.sale_id 
+  WHERE s.id = ?`;
+  await connection.execute(query, [id]);
+};
+
 module.exports = {
   listSales,
   findById,
   createSale,
   createNewSaleId,
   updateSale,
+  deleteSale,
 };

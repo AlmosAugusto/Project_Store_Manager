@@ -37,6 +37,9 @@ app.post('/sales', validateSales, salesController.createSale);
 // Req8 - Put Sales
 app.put('/sales/:id', validateSales, salesController.updateSale);
 
+// Req9 - Delete Sale
+app.delete('/sales/:id', salesController.deleteSale);
+
 app.use((err, _req, res, _next) => {
   if (err.status) return res.status(err.status).json({ message: err.message });
   console.log('update sales:', err.message);

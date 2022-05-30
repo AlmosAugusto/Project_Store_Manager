@@ -1,5 +1,5 @@
 const services = require('../services/sales.service');
-const { SUCESS, NOT_FOUND, CREATED, CONFLICT } = require('../statusCode');
+const { SUCESS, NOT_FOUND, CREATED, CONFLICT, DELETE } = require('../statusCode');
 
 const listSales = async (_req, res, _next) => {
   const sales = await services.listSales();
@@ -41,9 +41,21 @@ const createSale = async (req, res, _next) => {
       next(err);
     }
   };  
+
+  const deleteSale = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const deletedSale = await services.deleteSale(id);
+      return res.status(DELETE).json(deletedSale);
+    } catch (err) {
+      next(err);
+    }
+  };
+
 module.exports = {
   listSales,
   findById,
   createSale,
   updateSale,
+  deleteSale,
 };
