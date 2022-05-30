@@ -96,7 +96,7 @@ describe ('SALESMODEL - Testa se retorna uma lista com todos as vendas', () => {
   
       it('Teste se retorna um array', async() => {
         const result = await salesModel.findById();
-        expect(result).to.be.an('array');
+        expect(result).to.be.an('array', 'Sale not found');
       })
   
       it('Teste se retorna um array vazio', async() => {
@@ -157,3 +157,5 @@ describe ('SALESMODEL - Testa se retorna uma lista com todos as vendas', () => {
     })
   })
 })
+
+

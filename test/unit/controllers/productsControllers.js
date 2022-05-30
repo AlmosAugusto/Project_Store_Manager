@@ -3,7 +3,7 @@ const { expect } = require('chai');
 
 const productService = require('../../../services/products.service');
 const productsController = require('../../../controllers/products.controller');
-const { NOT_FOUND, SUCESS } = require('../../../statusCode');
+const { SUCESS, CREATED, CONFLICT } = require('../../../statusCode');
 const req = require('express/lib/request');
 
 describe ('Testa se retorna uma lista com todos os produtos', () => {
@@ -74,8 +74,50 @@ describe('PRODUCTSCONTROLER - Quando existem produtos cadastrados no banco de da
   })
 })
 
-describe ('Testa se apenas a venda com o id presente na URL é retornado', () => {
-  describe('PRODUCTSCONTROLER - Quando não existe nenhuma venda com o id informado na URl', () => {
+describe ('Testa se apenas o produto com o id presente na URL é retornado', () => {
+  
+  describe('PRODUCTSCONTROLER - Quando existem produtos cadastrados com o id informado na URL', () => {
+    const response = {}
+    const request = {}
+    const resultExecute =[
+    {
+      "id": 1,
+      "name": "produto A",
+      "quantity": 10
+    },
+    {
+      "id": 2,
+      "name": "produto B",
+      "quantity": 20
+    }
+  ];
+  
+  before(() => {
+    request.params = { id: 99 }
+    response.status = sinon.stub().returns(response);
+    response.json = sinon.stub().returns();
+    
+    sinon.stub(productService, 'findById').resolves(resultExecute);
+  })
+  
+  after(() => {
+    productService.findById.restore();
+  })
+  
+  it('Teste se retorna o metodo "status" passando o codigo 200', async() => {
+    await productsController.findById(request, response)
+    expect(response.status.calledWith(SUCESS)).to.be.equal(true);
+  })
+  
+  it('Teste se retorna o metodo json contendo os produtos', async() => {
+    await productsController.findById(request, response);
+    expect(response.json.calledWith(sinon.match.array.contains(resultExecute))); // documentaion sinon https://sinonjs.org/releases/latest/matchers/
+    })
+  })
+})
+
+describe ('PRODUCTSCONTROLER - Testa se o produto criado é retornado', () => {
+  describe('Quando obtem sucesso no cadastro do produto', () => {
     const response = {}
     const request = {}
     const resultExecute =[
@@ -93,60 +135,31 @@ describe ('Testa se apenas a venda com o id presente na URL é retornado', () =>
 
 
     before(() => {
-      request.params = { id: 999 }
+      request.body = { name: 'produto C', quantity: 25 }
   
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(productService, 'findById').resolves(resultExecute);
+      sinon.stub(productService, 'createProduct').resolves(resultExecute);
     })
 
-    after(() => { productService.findById.restore() })
+    after(() => { productService.createProduct.restore() })
 
-   /*  it('Teste se retorna o metodo "status" passando o codigo 404', async() => {
-      await productsController.findById(request, response)
-      expect(response.status.calledWith(NOT_FOUND)).to.be.equal(true);
-    }) */
-
-})
-describe('PRODUCTSCONTROLER - Quando existem vendas cadastradas com o id informado na URL', () => {
-  const response = {}
-  const request = {}
-  const resultExecute =[
-    {
-      "id": 1,
-      "name": "produto A",
-      "quantity": 10
-    },
-    {
-      "id": 2,
-      "name": "produto B",
-      "quantity": 20
-    }
-  ];
-
-  before(() => {
-    request.params = { id: 99 }
-    response.status = sinon.stub().returns(response);
-    response.json = sinon.stub().returns();
-
-    sinon.stub(productService, 'findById').resolves(resultExecute);
-  })
-
-  after(() => {
-    productService.findById.restore();
-  })
-
-  it('Teste se retorna o metodo "status" passando o codigo 200', async() => {
-    await productsController.findById(request, response)
-    expect(response.status.calledWith(200)).to.be.equal(true);
-  })
-
-  it('Teste se retorna o metodo json contendo os produtos', async() => {
-    await productsController.findById(request, response);
-    expect(response.json.calledWith(sinon.match.array.contains(resultExecute))); // documentaion sinon https://sinonjs.org/releases/latest/matchers/
+    it('Teste se retorna o metodo "status" passando o codigo 200', async() => {
+      await productsController.createProduct(request, response)
+      expect(response.status.calledWith(CREATED)).to.be.equal(true);
     })
 
+    it('Teste se retorna um array', async() => {
+      await productsController.createProduct(request, response);
+      expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
+      })
 
+      it('Teste se retorna o metodo json contendo o produto', async() => {
+        await productsController.createProduct(request, response);
+        expect(response.json.calledWith(sinon.match.array.contains(resultExecute))); // documentaion sinon https://sinonjs.org/releases/latest/matchers/
+        })  
   })
-})
+
+
+}) 
