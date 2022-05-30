@@ -309,5 +309,41 @@ describe ('PRODUCTSSERVICE - Testa se o produto criado é retornado', () => {
       })
     })
   })
+
+  describe ('PRODUCTSSERVICE - Testa se o produto é deletado', () => {
+    describe('quando o produto é deletado com sucesso', () => {
+      const resultExecute =[[
+        {
+          "id": 1,
+          "name": "produto A",
+          "quantity": 10
+        },
+        {
+          "id": 2,
+          "name": "produto B",
+          "quantity": 20
+        }
+      ]];
+  
+      before(() => {
+        sinon.stub(productsModel, 'findById').resolves(resultExecute)
+        sinon.stub(productsModel, 'deleteProduct')
+        .resolves();
+      })
+  
+      after(() => {
+        productsModel.findById.restore();
+        productsModel.deleteProduct.restore();
+      })
+  
+
+      it('Teste se retorna um object não vazio', async() => {
+        const result = await productsService.deleteProduct(1);
+        expect(result).to.be.undefined;
+        // console.log(resultExecute);
+      })
+  
+    })
+  })
 })
 

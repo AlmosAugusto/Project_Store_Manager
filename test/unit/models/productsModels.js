@@ -323,4 +323,26 @@ describe('Testa se o produto é atualizado', () => {
   })
 })
 
+describe('Testa se o produto é deletado', () => {
+  describe('quando o produto é deletado com sucesso', () => { 
+ 
+    before(() => {
+      sinon.stub(connection, 'execute')
+      .resolves();
+    })
+
+    after(() => {
+      connection.execute.restore();
+    })
+
+
+    it('Teste se retorna um object vazio', async() => {
+      const result = await productsModel.deleteProduct(1);
+      // console.log(result, 310);
+      expect(result).to.be.undefined;
+    })
+
+  })
+})
+
 

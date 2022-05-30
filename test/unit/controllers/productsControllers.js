@@ -3,7 +3,7 @@ const { expect } = require('chai');
 
 const productService = require('../../../services/products.service');
 const productsController = require('../../../controllers/products.controller');
-const { SUCESS, CREATED} = require('../../../statusCode');
+const { SUCESS, CREATED, DELETE} = require('../../../statusCode');
 
 describe ('Testa se retorna uma lista com todos os produtos', () => {
   describe('PRODUCTSCONTROLER - Quando não existe nenhum produto cadastrado', () => {
@@ -160,8 +160,8 @@ describe ('PRODUCTSCONTROLER - Testa se o produto criado é retornado', () => {
         })  
   })
 }) 
-describe ('PRODUCTSCONTROLER - Testa se o produto atualizado é retornado', () => {
-  describe('Quando obtem sucesso na ataulização do produto', () => {
+  describe ('PRODUCTSCONTROLER - Testa se o produto atualizado é retornado', () => {
+    describe('Quando obtem sucesso na atulização do produto', () => {
     const response = {}
     const request = {}
     const resultExecute =[
@@ -205,6 +205,41 @@ describe ('PRODUCTSCONTROLER - Testa se o produto atualizado é retornado', () =
       expect(response.json.calledWith(sinon.match.array.contains(resultExecute))); 
       })  
   })
-
-
 }) 
+
+describe ('PRODUCTSCONTROLER - Testa se o produto é deletado', () => {
+  describe('Quando obtem sucesso na exclusão do produto', () => {
+  const response = {}
+  const request = {}
+  const resultExecute =[
+    {
+      "id": 1,
+      "name": "produto A",
+      "quantity": 10
+    },
+    {
+      "id": 2,
+      "name": "produto B",
+      "quantity": 20
+    }
+  ];
+
+
+  before(() => {
+    request.params = { id: 1 };
+
+    response.status = sinon.stub().returns(response);
+    response.json = sinon.stub().returns();
+
+    sinon.stub(productService, 'deleteProduct').resolves(resultExecute);
+  })
+
+  after(() => { productService.deleteProduct.restore() })
+
+  it('Teste se retorna o metodo "status" passando o codigo 204', async() => {
+    await productsController.deleteProduct(request, response)
+    expect(response.status.calledWith(DELETE)).to.be.equal(true);
+    })
+  })
+}) 
+
