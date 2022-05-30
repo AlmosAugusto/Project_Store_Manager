@@ -254,18 +254,18 @@ describe ('PRODUCTSMODEL - Testa se o produto criado é retornado;', () => {
     })
 
     it('Teste se retorna um object', async() => {
-      const result = await productsModel.createProduct('produto C', 25);
+      const result = await productsModel.createProduct(3, 'produto C', 25);
       expect(result).to.be.an('object');
     })
 
     it('Teste se retorna um object não vazio', async() => {
-      const result = await productsModel.createProduct('produto C', 25);
+      const result = await productsModel.createProduct(3, 'produto C', 25);
       expect(result).to.be.not.empty;
       // console.log(result);
     })
 
     it('Teste se o objeto dentro do array retornado contem os atributos id, name e quantity', async() => {
-      const result = await productsModel.createProduct('produto C', 25);
+      const result = await productsModel.createProduct(3,'produto C', 25);
       // console.log(result);
       expect(result).to.be.includes.all.keys(
         'id',
@@ -273,6 +273,53 @@ describe ('PRODUCTSMODEL - Testa se o produto criado é retornado;', () => {
         'quantity'
       )
     })
+  })
+})
+
+describe('Testa se o produto é atualizado', () => {
+  describe('quando o produto é atualizado com sucesso', () => { 
+    const resultExecute =[[
+      {
+        "id": 1,
+        "name": "produto A",
+        "quantity": 10
+      },
+      {
+        "id": 2,
+        "name": "produto B",
+        "quantity": 20
+      }
+    ]];
+
+    before(() => {
+      sinon.stub(connection, 'execute')
+      .resolves(resultExecute);
+    })
+
+    after(() => {
+      connection.execute.restore();
+    })
+
+    it('Teste se retorna um object', async() => {
+      const result = await productsModel.updateProduct(1,'produto A', 25);
+      expect(result).to.be.an('object');
+    })
+
+    it('Teste se retorna um object não vazio', async() => {
+      const result = await productsModel.updateProduct(1, 'produto A', 25);
+      // console.log(result, 310);
+      expect(result).to.be.not.empty;
+    })
+
+    it('Teste se o objeto dentro do array retornado contem os atributos id, name e quantity', async() => {
+      const result = await productsModel.createProduct(1, 'produto A', 25);
+      expect(result).to.be.includes.all.keys(
+        'id',
+        'name',
+        'quantity'
+      )
+    })    
+
   })
 })
 

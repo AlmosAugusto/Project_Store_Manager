@@ -3,8 +3,7 @@ const { expect } = require('chai');
 
 const productService = require('../../../services/products.service');
 const productsController = require('../../../controllers/products.controller');
-const { SUCESS, CREATED, CONFLICT } = require('../../../statusCode');
-const req = require('express/lib/request');
+const { SUCESS, CREATED} = require('../../../statusCode');
 
 describe ('Testa se retorna uma lista com todos os produtos', () => {
   describe('PRODUCTSCONTROLER - Quando não existe nenhum produto cadastrado', () => {
@@ -145,7 +144,7 @@ describe ('PRODUCTSCONTROLER - Testa se o produto criado é retornado', () => {
 
     after(() => { productService.createProduct.restore() })
 
-    it('Teste se retorna o metodo "status" passando o codigo 200', async() => {
+    it('Teste se retorna o metodo "status" passando o codigo 201', async() => {
       await productsController.createProduct(request, response)
       expect(response.status.calledWith(CREATED)).to.be.equal(true);
     })
@@ -159,6 +158,52 @@ describe ('PRODUCTSCONTROLER - Testa se o produto criado é retornado', () => {
         await productsController.createProduct(request, response);
         expect(response.json.calledWith(sinon.match.array.contains(resultExecute))); // documentaion sinon https://sinonjs.org/releases/latest/matchers/
         })  
+  })
+}) 
+describe ('PRODUCTSCONTROLER - Testa se o produto atualizado é retornado', () => {
+  describe('Quando obtem sucesso na ataulização do produto', () => {
+    const response = {}
+    const request = {}
+    const resultExecute =[
+      {
+        "id": 1,
+        "name": "produto A",
+        "quantity": 10
+      },
+      {
+        "id": 2,
+        "name": "produto B",
+        "quantity": 20
+      }
+    ];
+
+
+    before(() => {
+      request.params = { id: 1 };
+      request.body = { name: 'produto ABC', quantity: 25 }
+  
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+
+      sinon.stub(productService, 'updateProduct').resolves(resultExecute);
+    })
+
+    after(() => { productService.updateProduct.restore() })
+
+    it('Teste se retorna o metodo "status" passando o codigo 200', async() => {
+      await productsController.updateProduct(request, response)
+      expect(response.status.calledWith(SUCESS)).to.be.equal(true);
+    })
+
+    it('Teste se retorna um array', async() => {
+      await productsController.updateProduct(request, response);
+      expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
+      })
+
+    it('Teste se retorna o metodo json contendo o produto', async() => {
+      await productsController.updateProduct(request, response);
+      expect(response.json.calledWith(sinon.match.array.contains(resultExecute))); 
+      })  
   })
 
 
