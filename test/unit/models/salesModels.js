@@ -156,6 +156,125 @@ describe ('SALESMODEL - Testa se retorna uma lista com todos as vendas', () => {
       })
     })
   })
+
+  describe ('SALESMODEL - Testa se a venda criada é retornado;', () => {
+    describe('Quando obtem sucesso no cadastro da venda', () => {
+      const resultExecute =[
+        {
+          "saleId": 1,
+          "date": "2021-09-09T04:54:29.000Z",
+          "productId": 1,
+          "quantity": 2
+        },
+        {
+          "saleId": 1,
+          "date": "2021-09-09T04:54:54.000Z",
+          "productId": 2,
+          "quantity": 2
+        }
+      ];
+  
+      before(() => {
+        sinon.stub(connection, 'execute')
+        .resolves(resultExecute);
+      })
+  
+      after(() => {
+        connection.execute.restore();
+      })
+  
+      it('Teste se retorna um object', async() => {
+        const [result] = await salesModel.createSale(3, 'produto C', 25);
+        expect(result).to.be.an('object');
+      })
+  
+      it('Teste se retorna um object não vazio', async() => {
+        const result = await salesModel.createSale(3, 'produto C', 25);
+        expect(result).to.be.not.empty;
+      })
+  
+      it('Teste se o objeto dentro do array retornado contem os atributos saleId, date, productId e quantity', async() => {
+        const [result] = await salesModel.createSale(3,'produto C', 25);
+        expect(result).to.be.includes.all.keys(
+          'saleId',
+          'date',
+          'productId',
+          'quantity'
+        )
+      })
+    })
+  })
+
+  describe('Testa se a venda é atualizada', () => {
+    describe('quando a venda é atualizada com sucesso', () => { 
+      const resultExecute =[
+        {
+          "saleId": 1,
+          "date": "2021-09-09T04:54:29.000Z",
+          "productId": 1,
+          "quantity": 2
+        },
+        {
+          "saleId": 1,
+          "date": "2021-09-09T04:54:54.000Z",
+          "productId": 2,
+          "quantity": 2
+        }
+      ];
+  
+      before(() => {
+        sinon.stub(connection, 'execute')
+        .resolves(resultExecute);
+      })
+  
+      after(() => {
+        connection.execute.restore();
+      })
+  
+      it('Teste se retorna um object', async() => {
+        const result = await salesModel.updateSale(1, 25);
+        expect(result).to.be.an('object');
+      })
+  
+      it('Teste se retorna um object não vazio', async() => {
+        const result = await salesModel.updateSale(1, 25);
+        // console.log(result, 310);
+        expect(result).to.be.not.empty;
+      })
+  
+      it('Teste se o objeto dentro do array retornado contem os atributos saleId, date, productId e quantity', async() => {
+        const result = await salesModel.updateSale(1, 25);
+        expect(result).to.be.includes.all.keys(
+          'saleId',
+          'date',
+          'productId',
+          'quantity'
+        )
+      })    
+  
+    })
+  })
+
+  describe('Testa se a venda é deletada', () => {
+    describe('quando a venda é deletada com sucesso', () => { 
+   
+      before(() => {
+        sinon.stub(connection, 'execute')
+        .resolves();
+      })
+  
+      after(() => {
+        connection.execute.restore();
+      })
+  
+  
+      it('Teste se retorna um object vazio', async() => {
+        const result = await salesModel.deleteSale(1);
+        expect(result).to.be.undefined;
+      })
+  
+    })
+  })
 })
 
 

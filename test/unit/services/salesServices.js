@@ -152,5 +152,89 @@ describe ('SALESSERVICE - Testa se retorna uma lista com todos as vendas', () =>
     })
   })
 
+  describe ('SALESSERVICE - Testa se a venda é atualizada', () => {
+    describe('quando a venda é atualizada com sucesso', () => {
+      const resultExecute =[
+        {
+          "saleId": 1,
+          "date": "2021-09-09T04:54:29.000Z",
+          "productId": 1,
+          "quantity": 2
+        },
+        {
+          "saleId": 1,
+          "date": "2021-09-09T04:54:54.000Z",
+          "productId": 2,
+          "quantity": 2
+        }
+      ];
+  
+      before(() => {
+        sinon.stub(salesModel, 'updateSale')
+        .resolves(resultExecute);
+      })
+  
+      after(() => {
+        salesModel.updateSale.restore();
+      })
+  
+      it('Teste se retorna um object', async() => {
+        const [result] = await salesModel.updateSale(1, 25);
+        expect(result).to.be.an('object');
+      })
+  
+      it('Teste se retorna um object não vazio', async() => {
+        const [result] = await salesModel.updateSale(1, 25);
+        expect(result).to.be.not.empty;
+      })
+  
+      it('Teste se o array retornado contem os atributos saleId, date, productId e quantity', async() => {
+        const [result] = await salesModel.updateSale(1, 25);
+        expect(result).to.be.includes.all.keys(
+        'saleId',
+        'date',
+        'productId',
+        'quantity'
+        )
+      })
+    })
+  })
 
+  describe ('SALESSERVICE - Testa se a venda é deletada', () => {
+    describe('quando a venda é deletada com sucesso', () => {
+      const resultExecute =[
+        {
+          "saleId": 1,
+          "date": "2021-09-09T04:54:29.000Z",
+          "productId": 1,
+          "quantity": 2
+        },
+        {
+          "saleId": 1,
+          "date": "2021-09-09T04:54:54.000Z",
+          "productId": 2,
+          "quantity": 2
+        }
+      ];
+  
+      before(() => {
+        sinon.stub(salesModel, 'findById').resolves(resultExecute)
+        sinon.stub(salesModel, 'deleteSale')
+        .resolves();
+      })
+  
+      after(() => {
+        salesModel.findById.restore();
+        salesModel.deleteSale.restore();
+      })
+  
+
+      it('Teste se retorna um object não vazio', async() => {
+        const result = await salesService.deleteSale(1);
+        expect(result).to.be.undefined;
+      })
+  
+    })
+  })
 })
+
