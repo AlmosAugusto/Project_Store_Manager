@@ -35,7 +35,7 @@ const updateSale = async (id, sales) => {
   const [verifyId] = await models.findById(id);
   // console.log(verifyId);
   if (verifyId.length === 0) throw errorHandler(NOT_FOUND, 'Sale not found');
-  console.log(sales);
+  // console.log(sales);
 
   await Promise.all(sales.map(
     ({ productId, quantity }) => models.updateSale(id, productId, quantity),

@@ -48,6 +48,14 @@ const deleteProduct = async (id) => {
   await connection.execute(query, [id]);
 };
 
+const updateQuantityCreate = async () => {
+
+};
+
+const updateQuantityDelete = async () => {
+
+};
+
 module.exports = {
   listProducts,
   findById,
@@ -55,4 +63,6 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  updateQuantityCreate,
+  updateQuantityDelete,
 };
