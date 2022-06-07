@@ -30,18 +30,11 @@ const createSale = async (sales) => {
   await Promise.all(sales.map(
     ({ productId, quantity }) => models.createSale(saleId, productId, quantity),
 ));
-/* if (sales[0].quantity > 50) {
-     throw errorHandler(UNPROCESSABLE_ENTITY, 'Such amount is not permitted to sell'); 
-    }  */
 
   const registeredSale = {
     id: saleId,
     itemsSold: sales,
   };
-  
- /*  if (registeredSale.itemsSold[0].quantity > 50) {
-     throw errorHandler(UNPROCESSABLE_ENTITY, 'Such amount is not permitted to sell'); 
-    } */
 
   return registeredSale;
 };
