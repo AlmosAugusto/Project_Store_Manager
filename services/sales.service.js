@@ -1,4 +1,6 @@
 const models = require('../models/sales.model');
+const ProductModels = require('../models/products.model');
+
 const { NOT_FOUND, UNPROCESSABLE_ENTITY } = require('../statusCode');
 
 const errorHandler = (status, message) => ({
@@ -18,10 +20,10 @@ const findById = async (id) => {
 
 const createSale = async (sales) => {
   const saleId = await models.createNewSaleId();
-  const [findedSale] = await models.findById(sales[0].productId);
+  const findedProduct = await ProductModels.findById(sales[0].productId);
 
-  console.log(findedSale[0].quantity);
-  if (sales[0].quantity > findedSale[0].quantity) {
+  console.log(findedProduct[0].quantity);
+  if (sales[0].quantity > findedProduct[0].quantity) {
      throw errorHandler(UNPROCESSABLE_ENTITY, 'Such amount is not permitted to sell'); 
     }
 
