@@ -1,5 +1,10 @@
 const models = require('../models/sales.model');
-const { NOT_FOUND } = require('../statusCode');
+const { NOT_FOUND, UNPROCESSABLE_ENTITY } = require('../statusCode');
+
+const errorHandler = (status, message) => ({
+  status,
+  message,
+});
 
 const listSales = async () => {
   const listedSales = await models.listSales();
@@ -13,23 +18,31 @@ const findById = async (id) => {
 
 const createSale = async (sales) => {
   const saleId = await models.createNewSaleId();
-  console.log(saleId);
+  const [findedSale] = await models.findById(sales[0].productId);
+
+  console.log(findedSale[0].quantity);
+  if (sales[0].quantity > findedSale[0].quantity) {
+     throw errorHandler(UNPROCESSABLE_ENTITY, 'Such amount is not permitted to sell'); 
+    }
 
   await Promise.all(sales.map(
     ({ productId, quantity }) => models.createSale(saleId, productId, quantity),
 ));
+/* if (sales[0].quantity > 50) {
+     throw errorHandler(UNPROCESSABLE_ENTITY, 'Such amount is not permitted to sell'); 
+    }  */
 
   const registeredSale = {
     id: saleId,
     itemsSold: sales,
   };
+  
+ /*  if (registeredSale.itemsSold[0].quantity > 50) {
+     throw errorHandler(UNPROCESSABLE_ENTITY, 'Such amount is not permitted to sell'); 
+    } */
+
   return registeredSale;
 };
-
-const errorHandler = (status, message) => ({
-  status,
-  message,
-});
 
 const updateSale = async (id, sales) => {
   const [verifyId] = await models.findById(id);

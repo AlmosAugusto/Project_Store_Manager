@@ -1,5 +1,5 @@
 const services = require('../services/sales.service');
-const { SUCESS, NOT_FOUND, CREATED, CONFLICT, DELETE } = require('../statusCode');
+const { SUCESS, NOT_FOUND, CREATED, DELETE } = require('../statusCode');
 
 const listSales = async (_req, res, _next) => {
   const sales = await services.listSales();
@@ -19,14 +19,14 @@ return res.status(NOT_FOUND).json(
   return res.status(SUCESS).json(findedById);
   };
 
-const createSale = async (req, res, _next) => {
+const createSale = async (req, res, next) => {
     try {
       const productIdQuantity = req.body;
 
       const createdSale = await services.createSale(productIdQuantity);
       return res.status(CREATED).json(createdSale);
     } catch (err) {
-      return res.status(CONFLICT).json({ message: 'Product already exists' });
+      return next(err);
     }
   };
 

@@ -18,7 +18,7 @@ const errorHandler = (status, message) => ({
 
 const createProduct = async (name, quantity) => {
   const verifyName = await models.getproductByName(name);
-  console.log(verifyName);
+  // console.log(verifyName);
   if (verifyName) throw errorHandler(CONFLICT, 'Product already exists');
 
   const registredProduct = await models.createProduct(name, quantity);
