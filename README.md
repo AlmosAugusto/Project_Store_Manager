@@ -1,13 +1,34 @@
-# :construction: README customizado em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
+# Boas vindas ao repositório do projeto Store Manager!!
 
-Para deixá-lo com a sua cara, basta alterar o seguinte arquivo da sua máquina: ~/.student-repo-publisher/custom/_NEW_README.md
 
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+<details>
+  <summary>
+    <strong>:memo: Sobre o projeto</strong>
+  </summary><br>
+  
+  - Projeto Store Manager desenvolvido na Trybe no módulo de Back-End..
+  
+  - Desenvolver uma API de gerenciamento de vendas
+</details>
+
+<details>
+  <summary>
+    <strong>:wrench: Tecnologias utilizadas</strong>
+  </summary><br>
+  
+  - JavaScript
+  - MySQl
+  
+</details>
+
+<details>
+  <summary>
+    <strong>Habilidades</strong>
+  </summary><br>
+  Neste projeto, foi verificado como:
+
+* Arquitetar e desenvolver a API com um banco de dados MySQL(API RESTful;
+* desenvolverá endpoints para criar, exibir, atualizar e excluir produtos e vendas;
+* Back-end seguindo o padrão arquitetural MSC;
+* Rodar a aplicação em containers usando o Docker.
+
